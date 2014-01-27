@@ -1,0 +1,166 @@
+<html>
+<style>
+path
+{
+  stroke: blue;
+  stroke-width: 1;
+  fill: none;
+}
+.divblue
+{
+  color: #00F;
+  background-color: #00F;
+  width: 10px;
+  font-size: 16;
+  margin-left: 40px;
+}
+.divgreen
+{
+  color: #0F0;
+  background-color: #0F0;
+  width: 10px;
+  font-size: 16;
+  margin-left: 40px;
+}
+.divyellow
+{
+  color: #FF0;
+  background-color: #FF0;
+  width: 10px;
+  font-size: 16;
+  margin-left: 40px;
+}
+input[type=text]
+{
+  background-color: #fff;
+  border: solid 0px #000;
+  color: #111;
+  width: 80px;
+  padding-left:0px;
+  border-radius:0px;
+  font-size: 16;
+  text-align: right;
+}
+.divwrap
+{
+  border: solid 0px #000;
+  width: 100%;
+  height: 100%;
+}
+.divmatrix
+{
+  background-color: #eef;
+  floag: left;
+  border: solid 0px #000;
+  width: 600px;
+  height: 100%;
+}
+.divright
+{
+  position: absolute;
+  margin-left: 610px;
+  top: 0px;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+</style>
+<body>
+<div class="divwrap">
+<div class="divmatrix" id="leftpanel">
+<br/>
+<div style="float: right; padding-right: 50px;">
+<input type="button" value="Draw" onclick="draw(500);"/>
+<br/>
+<input type="button" value="Random entries" onclick='cls();d3.selectAll(".matrix").property("value",gencomplex);'/>
+</div>
+<div style="padding-left: 20px;">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td>
+<input class="matrix" type="text" value="4 - 4i"/>
+<input class="matrix" type="text" value="-2 -2i"/>
+<input class="matrix" type="text" value="1 + 2i"/>
+<td><div class="divblue">&nbsp;</div>
+<tr>
+<td>
+<input class="matrix" type="text" value="3"/>
+<input class="matrix" type="text" value="0"/>
+<input class="matrix" type="text" value="1 + 3i"/>
+<td><div class="divgreen">&nbsp;</div>
+<tr>
+<td>
+<input class="matrix" type="text" value="3 - 1i"/>
+<input class="matrix" type="text" value="1"/>
+<input class="matrix" type="text" value="-5 - 10i"/>
+<td><div class="divyellow">&nbsp;</div>
+</table>
+</div>
+<br/><br/>
+</div>
+<div class="divright">
+<h1>Gershgorin Discs and Brauer's ovals of Cassini</h1>
+</div>
+</div>
+
+</body>
+
+
+
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script src="d3.v3.min.js" charset="utf-8"></script>
+<script src="complex.js"></script>
+<script src="cassini.js"></script>
+<script>
+// Set example matrix values...
+//d3.selectAll(".matrix").property("value",gencomplex);
+
+// Set globl margin and plot size and the plot container
+var margin = {top: 20, right: 100, bottom: 60, left: 60};
+var width = 580 - margin.left - margin.right;
+var height = 500 - margin.top - margin.bottom;
+var chart = d3.select('#leftpanel')
+              .append('svg:svg')
+              .attr('width', width + margin.right + margin.left)
+              .attr('height', height + margin.top + margin.bottom)
+              .attr('class', 'chart');
+var main = chart.append('g')
+              .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+              .attr('width', width)
+              .attr('height', height)
+              .attr('class', 'main');
+// Set up the axes with an arbitrary initial scale
+main.append('g')
+    .attr('transform', 'translate(0,' + height + ')')
+    .attr('class','xaxis')
+    .call(d3.svg.axis().scale(
+      d3.scale.linear().domain([-5,5]).range([ 0, width ])
+     ).orient('bottom'));
+
+var yScale = 
+    d3.svg.axis().scale(
+      d3.scale.linear().domain([-5,5]).range([ height, 0 ]));
+main.append('g')
+    .attr('transform', 'translate(0,0)')
+    .attr('class','yaxis')
+    .call(yScale
+//    .call(d3.svg.axis().scale(
+//      d3.scale.linear().domain([-5,5]).range([ height, 0 ]))
+     .orient('left'));
+
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript"
+  src="MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
