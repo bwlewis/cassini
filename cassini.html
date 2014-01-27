@@ -9,6 +9,7 @@ path
 .divblue
 {
   color: #00F;
+  opacity: 0.5;
   background-color: #00F;
   width: 10px;
   font-size: 16;
@@ -17,6 +18,7 @@ path
 .divgreen
 {
   color: #0F0;
+  opacity: 0.5;
   background-color: #0F0;
   width: 10px;
   font-size: 16;
@@ -25,6 +27,7 @@ path
 .divyellow
 {
   color: #FF0;
+  opacity: 0.5;
   background-color: #FF0;
   width: 10px;
   font-size: 16;
@@ -59,6 +62,7 @@ input[type=text]
 {
   position: absolute;
   margin-left: 610px;
+  margin-right: 20px;
   top: 0px;
 }
 body {
@@ -72,7 +76,7 @@ body {
 <div class="divmatrix" id="leftpanel">
 <br/>
 <div style="float: right; padding-right: 50px;">
-<input type="button" value="Draw" onclick="draw(500);"/>
+<input type="button" value="Plot" onclick="draw(500,0,1000);"/>
 <br/>
 <input type="button" value="Random entries" onclick='cls();d3.selectAll(".matrix").property("value",gencomplex);'/>
 </div>
@@ -98,10 +102,18 @@ body {
 <td><div class="divyellow">&nbsp;</div>
 </table>
 </div>
-<br/><br/>
+<br/>
 </div>
 <div class="divright">
 <h1>Gershgorin Discs and Brauer's ovals of Cassini</h1>
+<br/><i>For my friend and teacher, Professor Richard Varga.</i><br/>
+<h3>Quick start</h3>
+<p>
+Press the 'Plot' button to produce a plot for the displayed 3x3 matrix.
+You can edit the values in the matrix by hand, or generate new random
+values by pressing the button. After the plot is displayed, press on
+the labels to show or hide particular plot elements.
+</p>
 </div>
 </div>
 

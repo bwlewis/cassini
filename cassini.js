@@ -2,6 +2,10 @@
 // Apparently, imperative-style programming in JS is better optimized than
 // declarative. See http://jsperf.com/map-vs-native-for-loop/7
 
+var eigenvalues_showing = false;
+var gershgorin_showing = false;
+var cassini_showing = false;
+
 /* Complex number generator */
 var gencomplex = function()
 {
@@ -74,34 +78,13 @@ var cls = function()
   d3.selectAll(".gershgorin").remove();
   d3.selectAll(".eigenvalues").remove();
   d3.selectAll(".cassini").remove();
+  eigenvalues_showing = false;
+  gershgorin_showing = false;
+  cassini_showing = false;
 };
 
-var draw = function(N)
+var gersh = function(main, xax, yax, data, DELAY)
 {
-  var DURATION = 300;
-  var GDELAY = 1000;
-  var CDELAY = 2000;
-  var A = get_values();
-  var pad = 1;
-  var radii = off_diag_row_sums(A);
-  var data = [[A[0].re, A[0].im, radii[0], "rgba(0,0,255,0.5)"],
-              [A[4].re, A[4].im, radii[1], "rgba(50,255,0,0.5)"],
-              [A[8].re, A[8].im, radii[2], "rgba(255,255,0,0.5)"]];
-  var lim = data.map(function(v){return v[0] - v[2] - pad;}).
-                 concat(data.map(function(v){return v[0] + v[2] + pad;})).
-                 concat(data.map(function(v){return v[1] - v[2] - pad;})).
-                 concat(data.map(function(v){return v[1] + v[2] + pad;}));
-  var pmin = d3.min(lim);
-  var pmax = d3.max(lim);
-
-  cls();
-
-// Reset the axes (width, height are global variables)
-  var xax = d3.scale.linear().domain([pmin,pmax]).range([0,width]);
-  var yax = d3.scale.linear().domain([pmin,pmax]).range([height,0]);
-  d3.select('.yaxis').call(d3.svg.axis().scale(yax).orient("left"));
-  d3.select('.xaxis').call(d3.svg.axis().scale(xax).orient("bottom"));
-
 // Draw the Gershgorin discs
   var ggn = main.append("svg:g")
                 .selectAll("gershgorin")
@@ -112,19 +95,36 @@ var draw = function(N)
                 .attr("r", function(d) {return xax(d[2]) - xax(0);})
                 .attr("class","gershgorin")
                 .style("opacity","0")
-                .style("fill", function(d){return d[3];});
+                .style("fill", function(d){return d[3];})
+                .transition().style("opacity","1")
+                .duration(200).delay(DELAY);
   var label2 = main.append("svg:g")
                    .append("svg:text")
                    .attr("x","275").attr("y","0")
                    .attr("text-anchor","end")
                    .attr("class","labels")
+                   .attr("cursor","pointer")
                    .style("font-family","sans-serif")
                    .style("stroke","#55a")
                    .style("opacity","0")
-                   .text("Gershgorin discs");
-  ggn.transition().style("opacity","1").duration(DURATION).delay(GDELAY);
-  label2.transition().style("opacity","1").duration(DURATION).delay(GDELAY);
+                   .text("Gershgorin discs")
+                   .on('click', function()
+                     {
+                       if(gershgorin_showing)
+                       {
+                         d3.selectAll(".gershgorin").remove();
+                         gershgorin_showing = false;
+                       } else {
+                         draw(500,2,0);
+                       }
+                     })
+                   .transition().style("opacity","1")
+                   .duration(200).delay(DELAY);
+  gershgorin_showing = true;
+}
 
+var draw_eigs = function(main, xax, yax, A)
+{
 // Draw the eigenvalues
   var lambda = eigs3(A);
   main.append("svg:g")
@@ -154,12 +154,27 @@ var draw = function(N)
                    .attr("x","100").attr("y","0")
                    .attr("text-anchor","end")
                    .attr("class","labels")
+                   .attr("cursor","pointer")
                    .style("stroke","#555")
                    .style("opacity","1")
                    .style("font-family","sans-serif")
+                   .on('click', function()
+                     {
+                       if(eigenvalues_showing)
+                       {
+                         d3.selectAll(".eigenvalues").remove();
+                         eigenvalues_showing = false;
+                       } else {
+                         draw(500,1,0);
+                       }
+                     })
                    .text("Eigenvalues");
+  eigenvalues_showing = true;
+}
 
 // Brauer's ovals of Cassini...
+var draw_cassini = function(main, xax, yax, A, N, DELAY)
+{
   var line = d3.svg.line()
                .x(function(d) { return xax(d.re); })
                .y(function(d) { return yax(d.im); })
@@ -176,7 +191,7 @@ var draw = function(N)
                 .style("stroke","#a00")
                 .style("fill","#a00")
                 .style("opacity","0");
-        o.transition().style("opacity","0.2").duration(DURATION).delay(CDELAY);
+        o.transition().style("opacity","0.2").duration(200).delay(DELAY);
       }
     };
   interp(brauer(A,0,1,N));
@@ -187,13 +202,55 @@ var draw = function(N)
                    .append("svg:text")
                    .attr("x","500").attr("y","0")
                    .attr("text-anchor","end")
+                   .attr("cursor","pointer")
                    .style("stroke","#a55")
                    .attr("class","labels")
                    .style("font-family","sans-serif")
                    .style("opacity","0")
                    .text("Brauer's ovals of Cassini")
+                   .on('click', function()
+                     {
+                       if(cassini_showing)
+                       {
+                         d3.selectAll(".cassini").remove();
+                         cassini_showing = false;
+                       } else {
+                         draw(500,3,0);
+                       }
+                     })
                    .transition().style("opacity","1")
-                   .duration(DURATION).delay(CDELAY);
+                   .duration(200).delay(DELAY);
+  cassini_showing = true;
+}
+
+var draw = function(N, which, DELAY)
+{
+  var A = get_values();
+  var pad = 1;
+  var radii = off_diag_row_sums(A);
+  var data = [[A[0].re, A[0].im, radii[0], "rgba(0,0,255,0.5)"],
+              [A[4].re, A[4].im, radii[1], "rgba(50,255,0,0.5)"],
+              [A[8].re, A[8].im, radii[2], "rgba(255,255,0,0.5)"]];
+  var lim = data.map(function(v){return v[0] - v[2] - pad;}).
+                 concat(data.map(function(v){return v[0] + v[2] + pad;})).
+                 concat(data.map(function(v){return v[1] - v[2] - pad;})).
+                 concat(data.map(function(v){return v[1] + v[2] + pad;}));
+  var pmin = d3.min(lim);
+  var pmax = d3.max(lim);
+// Reset the axes (width, height are global variables)
+  var xax = d3.scale.linear().domain([pmin,pmax]).range([0,width]);
+  var yax = d3.scale.linear().domain([pmin,pmax]).range([height,0]);
+  if(which == 0)
+  {
+    cls();
+    d3.select('.yaxis').call(d3.svg.axis().scale(yax).orient("left"));
+    d3.select('.xaxis').call(d3.svg.axis().scale(xax).orient("bottom"));
+  }
+
+  if(which % 2 == 0) gersh(main,xax,yax, data, DELAY);
+  if(which % 3 == 0) draw_cassini(main,xax,yax, A, N, 2*DELAY);
+  if(which % 1 == 0) draw_eigs(main,xax,yax,A);
+
 };
 
 var rot = function(theta)
@@ -269,9 +326,7 @@ var brauer = function(A,i,j,N)
                });
        };
 
-console.log("1");
   var u = theta.map(solve);
-console.log("2");
 // There are two possible cases:
 // Two roots define a single oval.
 // Four roots defines two ovals.
