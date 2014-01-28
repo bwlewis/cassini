@@ -105,7 +105,9 @@ var off_diag_row_sums = function (A)
 var cls = function()
 {
 // Remove existing plot elements
-  d3.selectAll(".labels").remove();
+  d3.selectAll(".gershlabel").remove();
+  d3.selectAll(".casslabel").remove();
+  d3.selectAll(".eiglabel").remove();
   d3.selectAll(".gershgorin").remove();
   d3.selectAll(".eigenvalues").remove();
   d3.selectAll(".cassini").remove();
@@ -133,7 +135,6 @@ var gersh = function(main, xax, yax, data, DELAY)
                    .append("svg:text")
                    .attr("x","275").attr("y","0")
                    .attr("text-anchor","end")
-                   .attr("class","labels")
                    .attr("class","gershlabel")
                    .attr("cursor","pointer")
                    .style("font-family","sans-serif")
@@ -187,7 +188,6 @@ var draw_eigs = function(main, xax, yax, A)
                    .append("svg:text")
                    .attr("x","100").attr("y","0")
                    .attr("text-anchor","end")
-                   .attr("class","labels")
                    .attr("class","eiglabel")
                    .attr("cursor","pointer")
                    .style("stroke","#555")
@@ -241,7 +241,6 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                    .attr("text-anchor","end")
                    .attr("cursor","pointer")
                    .style("stroke","#a55")
-                   .attr("class","labels")
                    .attr("class","casslabel")
                    .style("font-family","sans-serif")
                    .style("opacity","0")
