@@ -1,5 +1,21 @@
 <html>
 <style>
+
+h1
+{
+  font-size: 42px;
+}
+
+p
+{
+  font-size: 20px;
+}
+
+td
+{
+  font-size: 24px;
+}
+
 path
 {
   stroke: blue;
@@ -33,54 +49,85 @@ path
   font-size: 16;
   margin-left: 40px;
 }
+input[type=button]
+{
+  font-size: 22px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
 input[type=text]
 {
   background-color: #fff;
   border: solid 0px #000;
   color: #111;
   width: 80px;
-  padding-left:0px;
-  border-radius:0px;
-  font-size: 16;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 0px;
+  font-size: 22;
   text-align: right;
-}
-.divwrap
-{
-  border: solid 0px #000;
-  width: 100%;
-  height: 100%;
 }
 .divmatrix
 {
   background-color: #eef;
-  floag: left;
   border: solid 0px #000;
+  float: left;
   width: 600px;
-  height: 100%;
 }
-.divright
+.divpage1
 {
-  position: absolute;
-  margin-left: 610px;
-  margin-right: 20px;
-  top: 0px;
+  background-color: #eef;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+.divpage2
+{
+  background-color: #fff;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 30px;
 }
 body {
   margin: 0;
   padding: 0;
 }
-
+.intro
+{
+  background-color: #eef;
+  border: solid 0px #000;
+  width: 1000px;
+  height: 570px;
+  margin: 0 auto;
+  padding-right: 10px;
+}
 </style>
 <body>
-<div class="divwrap">
-<div class="divmatrix" id="leftpanel">
-<br/>
-<div style="float: right; padding-right: 50px;">
-<input type="button" value="Plot" onclick="draw(500,0,1000);"/>
-<br/>
-<input type="button" value="Random entries" onclick='cls();d3.selectAll(".matrix").property("value",gencomplex);'/>
+
+<div id="page1" class="divpage1">
+<a id="top"></a>
+
+<div id="intro" class="intro">
+<center>
+<h1>Gershgorin Discs and Brauer's ovals of Cassini</h1>
+</center>
+
+<div class="divmatrix" id="plotpanel">
 </div>
-<div style="padding-left: 20px;">
+
+<br/>
+<h2>Quick start</h2>
+<p>
+Press the 'Plot' button to produce a plot for the displayed 3x3 matrix.
+You can edit the values in the matrix by hand, or generate new random
+values by pressing the button. After the plot is displayed, press on
+the labels to show or hide particular plot elements.
+</p>
+
+<br/>
+<div style="padding-left: 20px; float: right; padding-right: 40px;">
 <table cellspacing="0" cellpadding="0">
 <tr>
 <td>
@@ -102,20 +149,16 @@ body {
 <td><div class="divyellow">&nbsp;</div>
 </table>
 </div>
-<br/>
+
+<div style="float: right; padding-right: 50px;">
+<br/><br/>
+<input type="button" value="Plot" onclick="draw(500,0,1000);"/>
+&nbsp;&nbsp;
+<input type="button" value="Random entries" onclick='cls();d3.selectAll(".matrix").property("value",gencomplex);'/>
 </div>
-<div class="divright">
-<h1>Gershgorin Discs and Brauer's ovals of Cassini</h1>
-<br/><i>For my friend and teacher, Professor Richard Varga.</i><br/>
-<h3>Quick start</h3>
-<p>
-Press the 'Plot' button to produce a plot for the displayed 3x3 matrix.
-You can edit the values in the matrix by hand, or generate new random
-values by pressing the button. After the plot is displayed, press on
-the labels to show or hide particular plot elements.
-</p>
-</div>
-</div>
+
+</div> <!-- intro panel -->
+</div> <!-- page 1 -->
 
 </body>
 
@@ -140,7 +183,7 @@ the labels to show or hide particular plot elements.
 var margin = {top: 20, right: 100, bottom: 60, left: 60};
 var width = 580 - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom;
-var chart = d3.select('#leftpanel')
+var chart = d3.select('#plotpanel')
               .append('svg:svg')
               .attr('width', width + margin.right + margin.left)
               .attr('height', height + margin.top + margin.bottom)

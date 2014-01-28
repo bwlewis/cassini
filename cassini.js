@@ -134,6 +134,7 @@ var gersh = function(main, xax, yax, data, DELAY)
                    .attr("x","275").attr("y","0")
                    .attr("text-anchor","end")
                    .attr("class","labels")
+                   .attr("class","gershlabel")
                    .attr("cursor","pointer")
                    .style("font-family","sans-serif")
                    .style("stroke","#55a")
@@ -144,8 +145,10 @@ var gersh = function(main, xax, yax, data, DELAY)
                        if(gershgorin_showing)
                        {
                          d3.selectAll(".gershgorin").remove();
+                         d3.selectAll(".gershlabel").style("opacity","0.4");
                          gershgorin_showing = false;
                        } else {
+			 d3.selectAll(".gershlabel").remove();
                          draw(500,2,0);
                        }
                      })
@@ -185,6 +188,7 @@ var draw_eigs = function(main, xax, yax, A)
                    .attr("x","100").attr("y","0")
                    .attr("text-anchor","end")
                    .attr("class","labels")
+                   .attr("class","eiglabel")
                    .attr("cursor","pointer")
                    .style("stroke","#555")
                    .style("opacity","1")
@@ -194,8 +198,10 @@ var draw_eigs = function(main, xax, yax, A)
                        if(eigenvalues_showing)
                        {
                          d3.selectAll(".eigenvalues").remove();
+                         d3.selectAll(".eiglabel").style("opacity","0.4");
                          eigenvalues_showing = false;
                        } else {
+                         d3.selectAll(".eiglabel").remove();
                          draw(500,1,0);
                        }
                      })
@@ -236,6 +242,7 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                    .attr("cursor","pointer")
                    .style("stroke","#a55")
                    .attr("class","labels")
+                   .attr("class","casslabel")
                    .style("font-family","sans-serif")
                    .style("opacity","0")
                    .text("Brauer's ovals of Cassini")
@@ -244,8 +251,10 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                        if(cassini_showing)
                        {
                          d3.selectAll(".cassini").remove();
+                         d3.selectAll(".casslabel").style("opacity","0.4");
                          cassini_showing = false;
                        } else {
+			 d3.selectAll(".casslabel").remove();
                          draw(500,3,0);
                        }
                      })
@@ -276,12 +285,13 @@ var draw = function(N, which, DELAY)
     cls();
     d3.select('.yaxis').call(d3.svg.axis().scale(yax).orient("left"));
     d3.select('.xaxis').call(d3.svg.axis().scale(xax).orient("bottom"));
+    gersh(main,xax,yax, data, DELAY);
+    draw_cassini(main,xax,yax, A, N, 2*DELAY);
+    draw_eigs(main,xax,yax,A);
   }
-
-  if(which % 2 == 0) gersh(main,xax,yax, data, DELAY);
-  if(which % 3 == 0) draw_cassini(main,xax,yax, A, N, 2*DELAY);
-  if(which % 1 == 0) draw_eigs(main,xax,yax,A);
-
+  if(which == 2) gersh(main,xax,yax, data, DELAY);
+  if(which == 3) draw_cassini(main,xax,yax, A, N, 2*DELAY);
+  if(which == 1) draw_eigs(main,xax,yax,A);
 };
 
 var rot = function(theta)
