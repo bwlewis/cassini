@@ -4,11 +4,17 @@
 h1
 {
   font-size: 42px;
+  color: #222;
 }
-
+h2
+{
+  font-size: 28px;
+  color: #222;
+}
 p
 {
   font-size: 20px;
+  color: #222;
 }
 
 td
@@ -69,14 +75,14 @@ input[type=text]
 }
 .divmatrix
 {
-  background-color: #eef;
+  background-color: #ddf;
   border: solid 0px #000;
   float: left;
   width: 600px;
 }
 .divpage1
 {
-  background-color: #eef;
+  background-color: #ddf;
   width: 100%;
   margin: 0px;
   padding-top: 10px;
@@ -90,13 +96,29 @@ input[type=text]
   padding-top: 10px;
   padding-bottom: 30px;
 }
+.divpage3
+{
+  background-color: #aaa;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+.divpage4
+{
+  background-color: #444;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
 body {
   margin: 0;
   padding: 0;
 }
 .intro
 {
-  background-color: #eef;
+  background-color: #ddf;
   border: solid 0px #000;
   width: 1000px;
   height: 570px;
@@ -111,19 +133,18 @@ body {
 
 <div id="intro" class="intro">
 <center>
-<h1>Gershgorin Discs and Brauer's ovals of Cassini</h1>
+<h1>Gerschgorin Discs and Brauer's ovals of Cassini</h1>
 </center>
 
 <div class="divmatrix" id="plotpanel">
 </div>
 
-<br/>
-<h2>Quick start</h2>
+<br/><br/>
 <p>
-Press the 'Plot' button to produce a plot for the displayed 3x3 matrix.
-You can edit the values in the matrix by hand, or generate new random
-values by pressing the button. After the plot is displayed, press on
-the plot labels to show or hide corresponding plot elements.
+Press the 'Plot' button to produce a plot for the displayed 3x3 matrix.  You
+can edit the values in the matrix by hand, or generate new random values by
+pressing the button. Press on the plot labels to show or hide corresponding
+plot elements.
 </p>
 
 <br/>
@@ -159,6 +180,121 @@ the plot labels to show or hide corresponding plot elements.
 
 </div> <!-- intro panel -->
 </div> <!-- page 1 -->
+
+<div id="page2" class="divpage2">
+<a id="discussion"></a>
+<div style="margin-left: 50px; margin-right: 50px;">
+<center><h1>Discussion</h1></center>
+<div style="float: left; padding-right: 20px;">
+<image src="http://www.math.kent.edu/~varga/graphics/varga_sm.jpg" alt="Professor Varga"></img>
+</div>
+<p>
+I'm very fortunate to know Professor Richard S. Varga (that's him in the
+picture).  It seems ages ago that
+we wrote a Java applet (Java version 1.04!) together with Alan Krautstengl for
+the journal ETNA<a href="#vk">[9]</a>.
+I've updated that old work for the modern era here. Consider
+this a small dedication to Professor Varga in thanks for his inspiration and
+encouragement, and for his significant contributions to mathematics.
+</p><p>
+
+The plot above illustrates two eigenvalue inclusion methods. The methods
+produce sets in the complex plane that are guaranteed to contain the
+eigenvalues of a matrix. The methods are cheaper to compute than precise
+eigenvalue estimates for large matrices, but the inclusion sets might be big.
+</p><p>
+
+Gerschgorin's theorem<a href="#ge">[4]</a> defines perhaps the most
+famous eigenvalue inclusion method. Let
+$A = [a_{ij}] \in \mathbb{C}^{n\times n}$
+be an $n\times n$ matrix and let $R_i$ be its $i$<i>th</i> off-diagonal
+row sum defined by $R_i = \sum_{j\ne i} |a_{ij}|$.
+The Gerschgorin discs are the set
+\[
+\bigcup_{i=1}^n \{z\in\mathbb{C}: |z-a_{ii}| \le R_i\},
+\]
+and the Gerschgorin theorem states that the above set contains the eigenvalues
+of $A$. (The theorem is elegant but elementary, try to prove it before looking
+it up!) Of course the theorem also applies to off-diagonal column sums of $A$
+(by considering $A^H$, for example). Indeed, the union of the Gerschgorin sets
+of $A$ and those of $A^H$ may provide tighter bounds than illustrated here.
+One can further consider how tight one can make Gerschgorin-based estimates of
+eigenvalues, and Professor Varga has had a lot to say about this<a href="#v3">[8]</a>.
+</p><p>
+
+Each Gerschgorin disc uses data from one row of the matrix $A$. What if we
+consider <i>two</i> rows at a time? Can we find sets that contain $A$'s
+eigenvalues that are tighter than the Gerschgorin discs? This question was
+answered (affirmatively) by Alfred Brauer in 1947 when he came up with sets
+that he called the ovals of Cassini<a href="#br1">[1]</a>.
+
+</p><p>
+
+Let the $ij$-<i>th</i> oval of Cassini of the matrix $A$ be defined by:
+\[
+K_{ij}(A) = \{z\in\mathbb{C}: |z-a_{ii}|\cdot|z-a_{jj}| \le R_iR_j\},
+\]
+where $i,j=1,2,\ldots,n$ and $R_i$ is the $i$<i>th</i> off-diagonal
+row sum of $A$ defined above. There are
+$n(n-1)/2$ total ovals of Cassini for an $n\times n$ matrix. That is
+generally more than
+the total number of $n$ Gerschgorin discs&mdash;except, notably, in the
+interactive example above. Brauer showed that the
+eigenvalues of the matrix $A$ are included in the union of all the ovals
+of Cassini.
+</p><p>
+
+There are at least as many ovals of Cassini than Gerschgorin discs, and they are
+more complicated to define than Gerschgorin discs, but are they better at
+bounding eigenvalues? The answer is yes: the ovals of Cassini are <i>always</i>
+at least as good as the Gerschgorin discs at estimating the eigenvalues of any
+matrix, a result first mentioned by Brauer in 1958<a href="#br2">[2]</a>
+but only sparsely elsewhere (see <a href="#v2">[7]</a>).
+
+(As
+you play with the small interactive example above, you will see that the ovals
+of Cassini always lie within the Gerschgorin discs.) Despite its age,
+this result is neither well-known nor well documented in papers and books.
+Varga(<a href="#v2">[7]</a> and <a href="#v1">[6]</a>)
+and Varga and Krautstengl<a href="#vk">[9]</a>
+even more, that under very general conditions the ovals of Cassini
+define optimal (tightest) eigenvalue inclusion subsets among methods
+that use the same amount information.
+</p><p>
+
+What about considering three or more rows of a Matrix at a time? Can the 
+inclusion bounds be improved even more? 
+Remarkably, in general the answer is no! This is shown
+with a counter-example in Horn and Johnson's book<a href="#hj">[5, p. 382]</a>.
+However, see Brualdi's paper <a href="#bru">[3]</a> for an extension of this
+idea to more rows that does work for special matrices related to
+directed graphs.
+
+</p>
+</div> <!-- discussion container -->
+</div> <!-- page 2 -->
+
+<div id="page3" class="divpage3">
+<a id="javascript"></a>
+</div> <!-- page 3 -->
+
+<div id="page4" class="divpage4">
+<a id="references"></a>
+<div style="margin-left: 50px; margin-right: 50px;">
+<center><h1 style="color: #eee;">References</h1></center>
+<ol style="color: #fff;">
+<li> <a name="br1">A. Brauer, Limits for the characteristic roots of a matrix II, Duke Math. J. 14 (1947), pp. 21-26.</a>
+<li> <a name="br2">A. Brauer, Limits for the characteristic roots of a matrix VII, Duke Math. J. 25 (1958), pp. 583-590.</a>
+<li> <a name="bru">R. Brualdi, Matrices, eigenvalues, and directed graphs, Linear Multilinear Algebra 11 (1982), pp. 143-165.</a>
+<li> <a name="ge">S. Gerschgorin, Uber die Abgrenzung der Eigenwerte einer Matrix, Izv. Akad. Nauk SSSR Ser. Mat., 7 (1931), pp. 749-754.</a>
+<li> <a name="hj">R. A. Horn and C. R. Johnson, Matrix Analysis, Cambridge University Press, 1985.</a>
+<li> <a name="v1">R. S. Varga, Gerschgorin and His Circles, Springer-Verlag, Heidelberg, 2004.</a>
+<li><a name="v2">R. S. Varga, Gerschgorin Disks, Brauer Ovals of Cassini (a vindication), and Brualdi Sets, INFORMATION, 4 No. 2 (2001), pp. 171-178.</a>
+<li><a name="v3">R. S. Varga, Minimal Gerschgorin Sets, Pacific J. Math, 15 (1965), pp. 719-729.</a>
+<li> <a name="vk">Richard S. Varga and Alan Krautstengl, On Gerschgorin-type problems and ovals of Cassini, ETNA, 8 (1999), 15-20. MR 99k.15020. Zbl. 0927.15008.</a>
+</ol>
+</div>
+</div> <!-- page 4 -->
 
 </body>
 

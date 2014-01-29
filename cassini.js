@@ -118,7 +118,7 @@ var cls = function()
 
 var gersh = function(main, xax, yax, data, DELAY)
 {
-// Draw the Gershgorin discs
+// Draw the Gerschgorin discs
   var ggn = main.append("svg:g")
                 .selectAll("gershgorin")
                 .data(data)
@@ -140,7 +140,7 @@ var gersh = function(main, xax, yax, data, DELAY)
                    .style("font-family","sans-serif")
                    .style("stroke","#55a")
                    .style("opacity","0")
-                   .text("Gershgorin discs")
+                   .text("Gerschgorin discs")
                    .on('click', function()
                      {
                        if(gershgorin_showing)
