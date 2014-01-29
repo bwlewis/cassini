@@ -1,0 +1,492 @@
+<html>
+<style>
+
+h1
+{
+  font-size: 42px;
+  color: #222;
+}
+h2
+{
+  font-size: 28px;
+  color: #222;
+}
+ol
+{
+  font-size: 20px;
+  color: #fff;
+}
+p
+{
+  font-size: 20px;
+  color: #222;
+}
+
+td
+{
+  font-size: 24px;
+}
+
+path
+{
+  stroke: blue;
+  stroke-width: 1;
+  fill: none;
+}
+.divblue
+{
+  color: #00F;
+  opacity: 0.5;
+  background-color: #00F;
+  width: 10px;
+  font-size: 16;
+  margin-left: 40px;
+}
+.divgreen
+{
+  color: #0F0;
+  opacity: 0.5;
+  background-color: #0F0;
+  width: 10px;
+  font-size: 16;
+  margin-left: 40px;
+}
+.divyellow
+{
+  color: #FF0;
+  opacity: 0.5;
+  background-color: #FF0;
+  width: 10px;
+  font-size: 16;
+  margin-left: 40px;
+}
+input[type=button]
+{
+  font-size: 22px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+input[type=text]
+{
+  background-color: #fff;
+  border: solid 0px #000;
+  color: #111;
+  width: 80px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 0px;
+  font-size: 22;
+  text-align: right;
+}
+.divmatrix
+{
+  background-color: #ddf;
+  border: solid 0px #000;
+  float: left;
+  width: 600px;
+}
+.divpage1
+{
+  background-color: #ddf;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+.divpage2
+{
+  background-color: #fff;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+.divpage3
+{
+  background-color: #aaa;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+.divpage4
+{
+  background-color: #444;
+  width: 100%;
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 50px;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+.intro
+{
+  background-color: #ddf;
+  border: solid 0px #000;
+  width: 1000px;
+  height: 570px;
+  margin: 0 auto;
+  padding-right: 10px;
+}
+</style>
+<body>
+
+<div id="page1" class="divpage1">
+<a id="top"></a>
+
+<div id="intro" class="intro">
+<center>
+<h1>Gerschgorin Disks and Brauer's ovals of Cassini</h1>
+</center>
+
+<div class="divmatrix" id="plotpanel">
+</div>
+
+<br/><br/>
+<p>
+Press the 'Plot' button to produce a plot for the displayed 3x3 matrix.  You
+can edit the values in the matrix by hand, or generate new random values by
+pressing the button. Press on the plot labels to show or hide corresponding
+plot elements.
+</p>
+
+<br/>
+<div style="padding-left: 20px; float: right; padding-right: 40px;">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td>
+<input class="matrix" type="text" value="4 - 4i"/>
+<input class="matrix" type="text" value="-2 -2i"/>
+<input class="matrix" type="text" value="1 + 2i"/>
+<td><div class="divblue">&nbsp;</div>
+<tr>
+<td>
+<input class="matrix" type="text" value="3"/>
+<input class="matrix" type="text" value="0"/>
+<input class="matrix" type="text" value="1 + 3i"/>
+<td><div class="divgreen">&nbsp;</div>
+<tr>
+<td>
+<input class="matrix" type="text" value="3 - 1i"/>
+<input class="matrix" type="text" value="1"/>
+<input class="matrix" type="text" value="-5 - 10i"/>
+<td><div class="divyellow">&nbsp;</div>
+</table>
+</div>
+
+<div style="float: right; padding-right: 50px;">
+<br/><br/>
+<input type="button" value="Plot" onclick="draw(500,0,1000);"/>
+&nbsp;&nbsp;
+<input type="button" value="Random entries" onclick='cls();d3.selectAll(".matrix").property("value",gencomplex);'/>
+</div>
+
+</div> <!-- intro panel -->
+</div> <!-- page 1 -->
+
+<div id="page2" class="divpage2">
+<a id="discussion"></a>
+<div style="margin-left: 50px; margin-right: 50px;">
+<center><h1>Discussion</h1></center>
+<div style="float: left; padding-right: 20px;">
+<image src="http://www.math.kent.edu/~varga/graphics/varga_sm.jpg" alt="Professor Varga"></img>
+</div>
+<p>
+I'm very fortunate to know Professor Richard S. Varga (that's him in the
+picture).  It seems like ages ago that
+we wrote a Java applet (Java version 1.04!) together with Alan Krautstengl for
+the journal ETNA<a href="#vk">[9]</a>.
+I've updated that old work for the modern era here. Consider
+this a small dedication to Professor Varga in thanks for his inspiration and
+encouragement, and for his significant contributions to mathematics.
+</p><p>
+
+The plot above illustrates two eigenvalue inclusion methods. The methods
+produce sets in the complex plane that are guaranteed to contain the
+eigenvalues of a matrix. The methods are cheaper to compute than precise
+eigenvalue estimates for large matrices, but the inclusion sets might be big.
+</p><p>
+
+Gerschgorin's theorem<a href="#ge">[4]</a> defines perhaps the most
+famous eigenvalue inclusion method. Let
+$A = [a_{ij}] \in \mathbb{C}^{n\times n}$
+be an $n\times n$ matrix and let $R_i$ be its $i$<i>th</i> off-diagonal
+row sum defined by $R_i = \sum_{j\ne i} |a_{ij}|$.
+The Gerschgorin disks are the set
+\[
+\bigcup_{i=1}^n \{z\in\mathbb{C}: |z-a_{ii}| \le R_i\},
+\]
+and the Gerschgorin theorem states that the above set contains the eigenvalues
+of $A$. (The theorem is elegant but elementary, try to prove it before looking
+it up!) It's easy to see that the theorem also applies to off-diagonal column
+sums of $A$ (by considering $A^H$, for example). Indeed, the union of the
+Gerschgorin sets of $A$ and those of $A^H$ may provide tighter bounds than
+illustrated here.  One can further consider how tight one can make
+Gerschgorin-based estimates of eigenvalues, and Professor Varga has had a lot
+to say about this<a href="#v3">[8]</a>.
+</p><p>
+
+Each Gerschgorin disk uses data from one row of the matrix $A$. What if we
+consider <i>two</i> rows at a time? Can we find sets that contain $A$'s
+eigenvalues that are tighter than the Gerschgorin disks? This question was
+answered (affirmatively) by Alfred Brauer in 1947 when he came up with sets
+that he called the ovals of Cassini<a href="#br1">[1]</a>.
+
+</p><p>
+
+Let the $ij$-<i>th</i> oval of Cassini of the matrix $A$ be defined by:
+\[
+K_{ij}(A) = \{z\in\mathbb{C}: |z-a_{ii}|\cdot|z-a_{jj}| \le R_iR_j\},
+\]
+where $i,j=1,2,\ldots,n$, $i\ne j$, and $R_i$ is the $i$<i>th</i> off-diagonal
+row sum of $A$ defined above. There are
+$n(n-1)/2$ total ovals of Cassini for an $n\times n$ matrix. That is
+generally more than
+the total number of $n$ Gerschgorin disks&mdash;except, notably, in the
+interactive example above. Brauer showed that the
+eigenvalues of the matrix $A$ are included in the union of all the ovals
+of Cassini.
+</p><p>
+
+There are at least as many ovals of Cassini than Gerschgorin disks, and they are
+more complicated to define than Gerschgorin disks, but are they better at
+bounding eigenvalues? The answer is <i>yes</i>:
+the ovals of Cassini are <i>always</i>
+at least as good as the Gerschgorin disks at estimating the eigenvalues of any
+matrix, a result first mentioned by Brauer in 1958<a href="#br2">[2]</a>
+but only sparsely elsewhere (see <a href="#v2">[7]</a>).
+
+(As
+you play with the small interactive example above, you will see that the ovals
+of Cassini always lie within the Gerschgorin disks.) Despite its age,
+this result is neither well-known nor well documented in papers and books.
+Varga(<a href="#v2">[7]</a> and <a href="#v1">[6]</a>)
+and Varga and Krautstengl<a href="#vk">[9]</a>
+even more, that under very general conditions the ovals of Cassini
+define optimal (tightest) eigenvalue inclusion subsets among methods
+that use the same amount information.
+</p><p>
+
+What about considering three or more rows of a Matrix at a time? Can the 
+inclusion bounds be improved even more? 
+Remarkably, in general the answer is no! This is shown
+with a counter-example in Horn and Johnson's book<a href="#hj">[5, p. 382]</a>.
+However, see Brualdi's really interesting paper <a href="#bru">[3]</a> for an extension of this
+idea to more rows that <i>does</i> work for special matrices related to
+directed graphs.
+
+</p>
+</div> <!-- discussion container -->
+</div> <!-- page 2 -->
+
+<div id="page3" class="divpage3">
+<a id="javascript"></a>
+<div style="margin-left: 50px; margin-right: 50px;">
+<center><h1>Technology</h1></center>
+<p>
+The plotting program is written in Javascript and relies on
+the superb <a href="http://d3js.org">d3.js</a> library.
+LaTeX expressions are rendered using the
+<a href="http://www.mathjax.org/">MathJax</a> library.
+All source code  and this html document is available on Github at
+<a href="https://github.com/bwlewis/cassini">https://github.com/bwlewis/cassini</a>. You can view a live version of this document there at:
+<a href="XXX">XXX</a>.
+</p>
+<h2>Complex numbers</h2>
+<p>
+I considered many available numeric libraries for Javascript, including
+the very admirable <a href="http://www.numericjs.com/">NumericJavascript</a>
+project. After many experiments, I was never fully satisfied, mostly because
+few (none that I could find) projects support eigenvalue solvers for
+complex-valued matrices.
+</p>
+<p>
+In the end, I broke my usual rule of not re-inventing the wheel and
+implemented a really simple and tiny 
+complex-value type and supporting
+library for Javascript myself available here:
+<a href="https://github.com/bwlewis/cassini/blob/master/complex.js">https://github.com/bwlewis/cassini/blob/master/complex.js</a>.
+Feel free to fork it, use it, whatever. It's pretty basic but it does
+support complex-valued matrix multiplication, complex-valued matrix
+QR decomposition, and a few other things.
+</p>
+<h2>Plotting Brauer's ovals of Cassini</h2>
+<p>
+Although they look simple enough, the ovals of Cassini are really interesting
+little beasts. And their numerical estimation is tricky to get right.
+</p>
+<p>
+Let's consider just one oval using rows 1 and 2 of the matrix $A$. We
+parameterize the corresponding oval of Cassini by the following
+process:
+<ol style="color: #000;">
+<li> Let $w=A_{11}$, and set $A^{(1)} = A - w\cdot I$ (that is shift $A$ so that $A_{11}$ is zero).
+<li> Let $A^{(2)} = \gamma\cdot I A^{(1)}$, where $\gamma = -\arg A^{(1)}_{22}$ (this rotates the diagonal entry $A^{(1)}_{22}$ to the real line).
+<li> Let $A^{(3)} = A^{(2)} - \alpha I$, where $\alpha = A^{(2)}_{22}/2$.
+The transformed matrix $A^{(3)}$ now looks like:
+\[
+\left(
+\begin{matrix}
+-\alpha/2 & * & *\\
+* & \alpha/2 & *\\
+* & * & *\\
+\end{matrix}
+\right).
+\]
+Note that the off-diagonal row-sums remain unchanged from the original matrix.
+<li> Brauer's formula for defining the corresponding $K_{12}(A^{(3)})$ oval
+now simplifies a bit:
+\[
+\{z\in\mathbb{C}: |z-\alpha/2|\cdot|z+\alpha/2| \le R_1R_2\}
+=
+\{z\in\mathbb{C}: |z^2 -\alpha^2/4| \le R_1R_2\},
+\]
+and if we only consider points on the boundary of the oval, we're interested
+in the set:
+\[
+\{z\in\mathbb{C}: |z^2 -\alpha^2/4| = R_1R_2\}.
+\]
+<li> We parameterize the problem by angle.
+<div style="float: right; padding-left: 10px;">
+<img src="cosine.jpg" width="600px" border="1px"></img>
+</div>
+Let's write the complex number $z$ in polar form, $z=r e^{i\theta}$,
+and let $\theta$ vary over  $0 \le \theta \lt 2\pi$. Our task is to
+solve for $r$ for each value of $\theta$ to get the boundary of the oval.
+The law of cosines helps us out here. Consider the picture to the right.
+The law of cosines informs us that
+\[
+r^4 - 2r^2\frac{\alpha^2}{4}\cos2\theta + \alpha^4/{16} - (R_1R_2)^2 = 0.
+\]
+For each value of $\theta$, we need to solve a monic fourth degree
+polynomial with real-valued coefficients
+to find possible values of $r$ to determine points on the
+boundary of the oval of Cassini. The Javascript program
+<a href="https://github.com/bwlewis/cassini/blob/master/cassini.js">https://github.com/bwlewis/cassini/blob/master/cassini.js</a>
+proceeds for many discrete values of $\theta$ between zero and $2\pi$,
+and for each of those directly solves for the real-valued roots of the
+corresponding polynomial. This gives us points on the boundary of
+the oval of Cassini.
+</ol>
+</p>
+<h2>Notes and some additional difficulties</h2>
+<p>
+Eigenvalue solvers applied to an appropriate companion matrix are the normal
+way to find roots of higher-order polynomials. But in our case, the 4th
+degree polynomial was simple enough (monic in particular) to admit a fast
+direct algebraic solution.
+</p>
+<p>
+Finding points on the boundary of the ovals of the Cassini is one problem,
+and properly displaying them an entirely different one. Depending on how
+far apart the diagonal elements are and the relative sizes of the off-diagonal
+row sums, the ovals can form many interesting shapes including distinct
+sub-ovals. Thus one oval of Cassini might actually be composed of two
+separated components (in such cases, the roots of the corresponding
+polynomial consist of four real values instead of two). When this happens,
+we have to be careful to order the points carefully to draw ordered
+contiguous boundary point values in d3.js or else the figure will zig/zag
+between boundary values and not get filled in properly. The code goes
+to some effort to get this right, but I think that there are still some
+edge cases where it's not quite working perfectly yet!
+</p>
+</div> <!-- page container -->
+</div> <!-- page 3 -->
+<div id="page4" class="divpage4">
+<a id="references"></a>
+<div style="margin-left: 50px; margin-right: 50px;">
+<center><h1 style="color: #eee;">Author</h1></center>
+<p style="color: #eee;">
+I'm Bryan W. Lewis. I have a web page here: <a href="http://illposed.net" style="color: #eee;">http://illposed.net</a>.
+</p>
+<p style="color: #eee;">
+<center><h1 style="color: #eee;">References</h1></center>
+<ol style="color: #fff;">
+<li> <a name="br1">A. Brauer, Limits for the characteristic roots of a matrix II, Duke Math. J. 14 (1947), pp. 21-26.</a>
+<li> <a name="br2">A. Brauer, Limits for the characteristic roots of a matrix VII, Duke Math. J. 25 (1958), pp. 583-590.</a>
+<li> <a name="bru">R. Brualdi, Matrices, eigenvalues, and directed graphs, Linear Multilinear Algebra 11 (1982), pp. 143-165.</a>
+<li> <a name="ge">S. Gerschgorin, Uber die Abgrenzung der Eigenwerte einer Matrix, Izv. Akad. Nauk SSSR Ser. Mat., 7 (1931), pp. 749-754.</a>
+<li> <a name="hj">R. A. Horn and C. R. Johnson, Matrix Analysis, Cambridge University Press, 1985.</a>
+<li> <a name="v1">R. S. Varga, Gerschgorin and His Circles, Springer-Verlag, Heidelberg, 2004.</a>
+<li><a name="v2">R. S. Varga, Gerschgorin Disks, Brauer Ovals of Cassini (a vindication), and Brualdi Sets, INFORMATION, 4 No. 2 (2001), pp. 171-178.</a>
+<li><a name="v3">R. S. Varga, Minimal Gerschgorin Sets, Pacific J. Math, 15 (1965), pp. 719-729.</a>
+<li> <a name="vk">Richard S. Varga and Alan Krautstengl, On Gerschgorin-type problems and ovals of Cassini, ETNA, 8 (1999), 15-20. MR 99k.15020. Zbl. 0927.15008.</a>
+</ol>
+<center><h1 style="color: #eee;">Licenses</h1></center>
+<p style="color: #eee;">
+All of this is open source and free.
+I encourage you to fork, use, re-use, improve, modify, learn how to do,
+learn how not to do, and play with the code on Github here:
+<a style="color: #eee;" href="https://github.com/bwlewis/cassini">https://github.com/bwlewis/cassini</a>. You can view a live version of this document there at:
+The <a style="color: #eee;" href="http://d3js.org">d3.js</a> library is written by Michael Bostock
+licensed under the three-clause BSD license. 
+The <a  style="color: #eee;"href="http://www.mathjax.org/">MathJax</a> library is written by
+The MathJax Consortium and licensed under the Apache License, version 2.
+The Gerschgorin and Brauer's ovals of Cassini program and associated
+complex.js library were written by me and are licensed under the three-clause
+BSD license.
+</p>
+</div>
+</div> <!-- page 4 -->
+
+</body>
+
+
+
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script src="d3.v3.min.js" charset="utf-8"></script>
+<script src="complex.js"></script>
+<script src="cassini.js"></script>
+<script>
+// Set example matrix values...
+//d3.selectAll(".matrix").property("value",gencomplex);
+
+// Set globl margin and plot size and the plot container
+var margin = {top: 20, right: 100, bottom: 60, left: 60};
+var width = 580 - margin.left - margin.right;
+var height = 500 - margin.top - margin.bottom;
+var chart = d3.select('#plotpanel')
+              .append('svg:svg')
+              .attr('width', width + margin.right + margin.left)
+              .attr('height', height + margin.top + margin.bottom)
+              .attr('class', 'chart');
+var main = chart.append('g')
+              .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+              .attr('width', width)
+              .attr('height', height)
+              .attr('class', 'main');
+// Set up the axes with an arbitrary initial scale
+main.append('g')
+    .attr('transform', 'translate(0,' + height + ')')
+    .attr('class','xaxis')
+    .call(d3.svg.axis().scale(
+      d3.scale.linear().domain([-5,5]).range([ 0, width ])
+     ).orient('bottom'));
+
+var yScale = 
+    d3.svg.axis().scale(
+      d3.scale.linear().domain([-5,5]).range([ height, 0 ]));
+main.append('g')
+    .attr('transform', 'translate(0,0)')
+    .attr('class','yaxis')
+    .call(yScale
+     .orient('left'));
+
+/* Welcome plot */
+    draw(500,0,1000);
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript"
+  src="MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
