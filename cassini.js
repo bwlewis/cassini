@@ -157,7 +157,7 @@ var gersh = function(main, xax, yax, data, DELAY)
                          gershgorin_showing = false;
                        } else {
 			 d3.selectAll(".gershlabel").remove();
-                         draw(500,2,0);
+                         draw(1000,2,0);
                        }
                      })
                    .transition().style("opacity","1")
@@ -209,7 +209,7 @@ var draw_eigs = function(main, xax, yax, A)
                          eigenvalues_showing = false;
                        } else {
                          d3.selectAll(".eiglabel").remove();
-                         draw(500,1,0);
+                         draw(1000,1,0);
                        }
                      })
                    .text("Eigenvalues");
@@ -261,7 +261,7 @@ var draw_cassini = function(main, xax, yax, A, N, DELAY)
                          cassini_showing = false;
                        } else {
 			 d3.selectAll(".casslabel").remove();
-                         draw(500,3,0);
+                         draw(1000,3,0);
                        }
                      })
                    .transition().style("opacity","1")
