@@ -253,36 +253,27 @@ eigenvalues of the matrix $A$ are included in the union of all its ovals
 of Cassini.
 </p><p>
 
-There are at least as many ovals of Cassini than Gerschgorin disks, and they are
-more complicated to define than Gerschgorin disks, but are they better at
-bounding eigenvalues? The answer is <i>yes</i>:
-the ovals of Cassini are <i>always</i>
-at least as good as the Gerschgorin disks at estimating the eigenvalues of any
-matrix, a result first mentioned by Brauer in 1958<a href="#br2">[2]</a>
-but only sparsely elsewhere (see <a href="#v2">[7]</a>).
+Are the ovals of Cassini better at bounding eigenvalues than Gerschgorin diks?
+The answer is yes!  The ovals of Cassini are <i>always</i> at least as good as
+the Gerschgorin disks at estimating the eigenvalues of any matrix, a result
+first mentioned by Brauer in 1958<a href="#br2">[2]</a> but only sparsely
+elsewhere (see <a href="#v2">[7]</a>).
 
-(As
-you play with the small interactive example above, you will see that the ovals
-of Cassini always lie within the Gerschgorin disks.) Despite its age,
-this result is neither well-known nor well documented in papers and books.
-Varga(<a href="#v2">[7]</a> and <a href="#v1">[6]</a>)
-and Varga and Krautstengl<a href="#vk">[9]</a>
-show even more&mdash;that under very general conditions the ovals of Cassini
-define optimal (tightest) eigenvalue inclusion subsets among methods
-that use the same amount information.
-</p><p>
+(As you play with the small interactive example above, you will see that the
+ovals of Cassini always lie within the Gerschgorin disks.) This result is not
+so well-known.  Varga(<a href="#v2">[7]</a> and <a href="#v1">[6]</a>) and
+Varga and Krautstengl<a href="#vk">[9]</a> show even more&mdash;that under very
+general conditions the ovals of Cassini define optimal (tightest) eigenvalue
+inclusion sets among methods that use the same amount information.  </p><p>
 
-What about considering three or more rows of a Matrix at a time? Can the 
-inclusion bounds be improved even more? 
-Remarkably, in general the answer is no! This is shown
-with a counter-example in Horn and Johnson's book<a href="#hj">[5, p. 382]</a>.
-However, see Brualdi's really interesting paper <a href="#bru">[3]</a> for an extension of this
-idea to more rows that <i>does</i> work for special matrices related to
-directed graphs.
-
-</p>
-</div> <!-- discussion container -->
-</div> <!-- page 2 -->
+What about considering three or more rows of a Matrix at a time? Can the
+inclusion bounds be improved even more?  Remarkably, in general the answer is
+no! Generalizations to three or more rows at a time might not even contain all
+the eigenvalues. This is shown with a counter-example in Horn and Johnson's
+book<a href="#hj">[5, p. 382]</a>.  However, see Brualdi's really interesting
+paper <a href="#bru">[3]</a> for an extension of Gerschgorin and Brauer's ideas
+to more rows that <i>does</i> work for special matrices related to directed
+graphs.  </p> </div> <!-- discussion container --> </div> <!-- page 2 -->
 
 <div id="page3" class="divpage3">
 <a id="javascript"></a>
@@ -317,8 +308,8 @@ QR decomposition, and a few other things.
 </p>
 <h2>Plotting Brauer's ovals of Cassini</h2>
 <p>
-Although they look simple enough, the ovals of Cassini are really interesting
-little beasts. And their numerical estimation is tricky to get right.
+This section outlines the approach the interactive example takes
+to numerically estimate and display the ovals of Cassini.
 </p>
 <p>
 Let's consider just one oval using rows 1 and 2 of the matrix $A$. We
@@ -351,13 +342,15 @@ in the set:
 \[
 \{z\in\mathbb{C}: |z^2 -\alpha^2| = R_1R_2\}.
 \]
-<li> We parameterize the problem by angle.
+<li>
 <div style="float: right; padding-left: 10px;">
 <img src="cosine.jpg" width="600px" border="1px"></img>
 </div>
-Let's write the complex number $z$ in polar form, $z=r e^{i\theta}$,
-and let $\theta$ vary over  $0 \le \theta \lt 2\pi$. Our task is to
-solve for $r$ for each value of $\theta$ to get the boundary of the oval.
+Write the complex number $z$ in polar form, $z=r e^{i\theta}$,
+and let $\theta$ vary over  $0 \le \theta \lt 2\pi$ to parameterize
+the problem. Our task is to
+solve for $r$ for each value of $\theta$ to get the boundary of the shifted
+and rotated oval.
 The law of cosines helps us out here. Consider the picture to the right.
 The law of cosines informs us that
 \[
@@ -371,24 +364,29 @@ boundary of the oval of Cassini. The Javascript program
 proceeds for many discrete values of $\theta$ between zero and $2\pi$,
 and for each of those directly solves for the real-valued roots of the
 corresponding polynomial. This gives us points on the boundary of
-the oval of Cassini.
+the corresponding shifted and rotated oval of Cassini.
+<li> Apply the inverse shifts and rotations from steps 3&mdash;1 to the
+solution points to obtain points on the boundary of the original oval.
 </ol>
 </p>
 <h2>Notes and some additional difficulties</h2>
 <p>
 Eigenvalue solvers applied to an appropriate companion matrix are the normal
 way to find roots of higher-order polynomials. But in our case, the 4th
-degree polynomial was simple enough (monic in particular) to admit a fast
-direct algebraic solution.
+degree polynomial was simple enough (monic, real-valued coefficients) to
+admit a fast direct algebraic solution. If you want to extend this to
+larger matrices, you'll need to use an iterative eigenvalue solver instead
+(thank you very much Galois! XXX).
 </p>
 <p>
 Finding points on the boundary of the ovals of the Cassini is one problem,
 and properly displaying them an entirely different one. Depending on how
 far apart the diagonal elements are and the relative sizes of the off-diagonal
-row sums, the ovals can form many interesting shapes including distinct
-sub-ovals. Thus one oval of Cassini might actually be composed of two
-separated components (in such cases, the roots of the corresponding
-polynomial consist of four real values instead of two). When this happens,
+row sums, the ovals can form many interesting shapes including
+figure eights and two distinct
+sub-ovals.
+In the latter case the roots of the corresponding
+polynomial consist of four real values instead of two. When this happens,
 we have to be careful to order the points carefully to draw ordered
 contiguous boundary point values in d3.js or else the figure will zig/zag
 between boundary values and not get filled in properly. The code goes
@@ -417,7 +415,7 @@ I'm Bryan W. Lewis. I have a web page here: <a href="http://illposed.net" style=
 <li><a name="v3">R. S. Varga, Minimal Gerschgorin Sets, Pacific J. Math, 15 (1965), pp. 719-729.</a>
 <li> <a name="vk">Richard S. Varga and Alan Krautstengl, On Gerschgorin-type problems and ovals of Cassini, ETNA, 8 (1999), 15-20. MR 99k.15020. Zbl. 0927.15008.</a>
 </ol>
-<center><h1 style="color: #eee;">Licenses</h1></center>
+<br/><br/><br/>
 <p style="color: #eee;">
 <b>All code associated with this web page is free and open source.</b>
 I encourage you to fork, use, re-use, improve, modify, learn how to do,
@@ -432,6 +430,7 @@ The Gerschgorin and Brauer's ovals of Cassini program and associated
 complex.js library were written by me and are licensed under the three-clause
 BSD license.
 </p>
+<br/><br/><br/>
 </div>
 </div> <!-- page 4 -->
 
