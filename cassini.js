@@ -369,16 +369,16 @@ var brauer = function(A,i,j,N)
 // undo the rotations and shifts...
                  z = W1[0].conj().mul((W2[0].conj().mul(z.add(s2))).add(s1));
                  z.flag = flag;
-                 z.alpha = t;
+                 z.alpha = t*(flag*2-1);
                  z.theta = theta;
                  z.gamma = gamma;
 // XXX XXX XXX hmmm this needs adjustment depending on ???
 // see the ex1 example versus the main example.
-if(s2>0)
-{
-z.theta = gamma;
-z.gamma = theta;
-}
+                 if(s2>0)
+                 {
+                   z.theta = gamma;
+                   z.gamma = theta;
+                 }
                  return z;
                });
        };
