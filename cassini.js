@@ -337,7 +337,7 @@ var shift = function (X, z)
 var brauer = function(A,i,j,N)
 {
   var theta = Array.apply(null,new Array(N)).map(
-                     function(x,i) {return 2*Math.PI*i/N;});
+                     function(x,i) {return 2*Math.PI*i/(N-1);});
   var r = off_diag_row_sums(A);
   var tol = Math.sqrt(eps());
 
