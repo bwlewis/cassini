@@ -318,6 +318,15 @@ var shift = function (X, z)
   return Y;
 };
 
+
+/* Estimate points on the boundary of Brauer's ovals of Cassini, where A is an
+ * i*j matrix and N is the number of points to estimate.  The function returns
+ * a list of arrays of complext numbers on the boundary.  A list with one array
+ * of numbers corresponds to a single shape. A list with two arrays corresponds
+ * to two disconnected shapes. The function tries to order the points along the
+ * boundary so that they can be linearly interpolated in order by connecting
+ * the dots (this is tricky!).
+ */
 var brauer = function(A,i,j,N)
 {
   var theta = Array.apply(null,new Array(N)).map(
@@ -360,8 +369,16 @@ var brauer = function(A,i,j,N)
 // undo the rotations and shifts...
                  z = W1[0].conj().mul((W2[0].conj().mul(z.add(s2))).add(s1));
                  z.flag = flag;
+                 z.alpha = t;
                  z.theta = theta;
                  z.gamma = gamma;
+// XXX XXX XXX hmmm this needs adjustment depending on ???
+// see the ex1 example versus the main example.
+if(s2>0)
+{
+z.theta = gamma;
+z.gamma = theta;
+}
                  return z;
                });
        };
@@ -374,7 +391,7 @@ var brauer = function(A,i,j,N)
   if(m<=2)
   {
     var X0 = [].concat.apply([],u).filter(function(z) {return !isNaN(z.re) && !isNaN(z.im)});
-    X = [X0.sort(function(a,b){return a.arg() - b.arg();})];
+    X = [X0.sort(function(a,b){return a.alpha - b.alpha;})];
     return X;
   } else
   {
@@ -402,3 +419,22 @@ real_root = function(t,a,K)
             }).map(function(w){return w.re;});
   return ans;
 };
+
+// XXX
+// bad examples
+ex1 = function()
+{
+  var x = d3.selectAll(".matrix")[0];
+  x[0].value="-5"; x[1].value="0"; x[2].value="5";
+  x[3].value="0"; x[4].value="5"; x[5].value="5";
+  x[6].value="0"; x[7].value="0"; x[8].value="5";
+}
+
+ex2 = function()
+{
+  var x = d3.selectAll(".matrix")[0];
+  x[0].value="1 - 15i"; x[1].value="-2 - 3i"; x[2].value="-4";
+  x[3].value="0 + 1i"; x[4].value="-1 + 4i"; x[5].value="4 - 1i";
+  x[6].value="4 + 4i"; x[7].value="-5"; x[8].value="-12 - 3i";
+}
+

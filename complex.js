@@ -482,6 +482,7 @@ var quartic = function(a3,a2,a1,a0)
   var tol2 = 0.00001;
   var rz = resolvent(a3,a2,a1,a0);
   var y1 = rz.filter(function(z) {return(Math.abs(z.im)<tol);})[0];
+  if(y1==undefined) return undefined;
   var D, E;
   var R = y1.add(0.25*a3*a3).sub(a2).pow(0.5);
   if(R.mod() < tol2)  // Tolerance here is a problem XXX
