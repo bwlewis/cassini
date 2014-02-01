@@ -55,7 +55,6 @@ var gencomplex = function()
 
 /* Parse a string representation of a complex number, returning
  * a Complex typed value.
-XXX Improve this to recognize single i value
  */
 var parse_complex = function(s)
 {
@@ -66,6 +65,14 @@ var parse_complex = function(s)
            .replace("i","").replace("I","")
            .replace(/^ +/,"").split(/ +/);
   var x = parseFloat(v[0]);
+  if(isNaN(x))
+  {
+    x = 1;
+  }
+  if((v.length == 1) && (s.match(/i/) != null))
+  {
+    return new Complex(0,x);
+  }
   var y = 0;
   if(v.length > 1)
   {
