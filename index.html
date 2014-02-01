@@ -177,7 +177,7 @@ plot elements.
 
 <div style="float: right; padding-right: 50px;">
 <br/><br/>
-<input type="button" value="Plot" onclick="draw(500,0,1000);"/>
+<input type="button" value="Plot" onclick="draw(500,0,2000);"/>
 &nbsp;&nbsp;
 <input type="button" value="Random entries" onclick='cls();d3.selectAll(".matrix").property("value",gencomplex);'/>
 </div>
@@ -316,8 +316,8 @@ Let's consider just one oval using rows 1 and 2 of the matrix $A$. We
 parameterize the corresponding oval of Cassini by the following
 process:
 <ol style="color: #000;">
-<li> Let $w=A_{11}$, and set $A^{(1)} = A - w\cdot I$ (that is shift $A$ so that $A_{11}$ is zero).
-<li> Let $A^{(2)} = \gamma\cdot I A^{(1)}$, where $\gamma = -\arg A^{(1)}_{22}$ (this rotates the diagonal entry $A^{(1)}_{22}$ to the real line).
+<li> Let $w=A_{11}$, and set $A^{(1)} = A - wI$ (that is shift $A$ so that $A_{11}$ is zero).
+<li> Let $A^{(2)} = \gamma I\cdot A^{(1)}$, where $\gamma = -\arg A^{(1)}_{22}$ (this rotates the diagonal entry $A^{(1)}_{22}$ to the real line).
 <li> Let $A^{(3)} = A^{(2)} - \alpha I$, where $\alpha = A^{(2)}_{22}/2$.
 The transformed matrix $A^{(3)}$ now looks like:
 \[
@@ -338,7 +338,7 @@ now simplifies a bit:
 \{z\in\mathbb{C}: |z^2 -\alpha^2| \le R_1R_2\},
 \]
 and if we only consider points on the boundary of the oval, we're interested
-in the set:
+in:
 \[
 \{z\in\mathbb{C}: |z^2 -\alpha^2| = R_1R_2\}.
 \]
@@ -347,9 +347,9 @@ in the set:
 <img src="cosine.jpg" width="600px" border="1px"></img>
 </div>
 Write the complex number $z$ in polar form, $z=r e^{i\theta}$,
-and let $\theta$ vary over  $0 \le \theta \lt 2\pi$ to parameterize
-the problem. Our task is to
-solve for $r$ for each value of $\theta$ to get the boundary of the shifted
+and let $\theta$ vary between $0 \le \theta \lt 2\pi$ to parameterize
+the problem. Our task is, for each value of $\theta$,
+solve for $r$ to get a point on the boundary of the shifted
 and rotated oval.
 The law of cosines helps us out here. Consider the picture to the right.
 The law of cosines informs us that
@@ -376,7 +376,7 @@ way to find roots of higher-order polynomials. But in our case, the 4th
 degree polynomial was simple enough (monic, real-valued coefficients) to
 admit a fast direct algebraic solution. If you want to extend this to
 larger matrices, you'll need to use an iterative eigenvalue solver instead
-(thank you very much Galois! XXX).
+(thank you very much Galois!).
 </p>
 <p>
 Finding points on the boundary of the ovals of the Cassini is one problem,
@@ -485,7 +485,7 @@ main.append('g')
      .orient('left'));
 
 /* Welcome plot */
-    draw(500,0,1000);
+    draw(500,0,2000);
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
