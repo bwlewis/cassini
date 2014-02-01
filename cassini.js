@@ -424,6 +424,7 @@ real_root = function(t,a,K)
   var a2 = -2*a*a*Math.cos(2*t);
   var a0 = a*a*a*a - K*K;
   var l = quartic(0.0,a2,0.0,a0);
+  if(l==undefined) l = [0];
   var ans = l.filter(function(z)
             {
               return (Math.abs(z.im)<tol); 
@@ -444,8 +445,8 @@ ex1 = function()
 ex2 = function()
 {
   var x = d3.selectAll(".matrix")[0];
-  x[0].value="1 - 15i"; x[1].value="-2 - 3i"; x[2].value="-4";
-  x[3].value="0 + 1i"; x[4].value="-1 + 4i"; x[5].value="4 - 1i";
-  x[6].value="4 + 4i"; x[7].value="-5"; x[8].value="-12 - 3i";
+  x[0].value="-1 - 4i"; x[1].value="-1 - 5i"; x[2].value="1 + 4i";
+  x[3].value="-2 + 2i"; x[4].value="-3 - 4i"; x[5].value="-4 + 2i";
+  x[6].value="-1 + 1i"; x[7].value="-5 - 2i"; x[8].value="2 + 11i";
 }
 
