@@ -64,6 +64,8 @@ var parse_complex = function(s)
            .replace(/\+ +([0-9.]+)/,"+$1")
            .replace("i","").replace("I","")
            .replace(/^ +/,"").split(/ +/);
+  if(v[0]=="") v[0]="1";
+  if(v[0]=="-") v[0]="-1";
   var x = parseFloat(v[0]);
   if(isNaN(x))
   {
@@ -74,10 +76,12 @@ var parse_complex = function(s)
     return new Complex(0,x);
   }
   var y = 0;
+  if(v[1]=="") v[1]="1";
+  if(v[1]=="-") v[1]="-1";
   if(v.length > 1)
   {
     y = parseFloat(v[1]);
-    if(isNaN(y)) y = 0;
+    if(isNaN(y)) y = 1;
   }
   return new Complex(x,y);
 };
