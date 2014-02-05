@@ -223,12 +223,19 @@ The Gerschgorin disks are the set
 \]
 and the Gerschgorin theorem states that the above set contains the eigenvalues
 of $A$. (The theorem is elegant but elementary, try to prove it before looking
-it up!) It's easy to see that the theorem also applies to off-diagonal column
+it up!)
+
+Gerschgorin's theorem says that if we replace a matrix with only two numbers
+per row, the diagonal entry and off-diagonal row sum, then we can still bound
+where its eigenvalues will be!
+
+It's easy to see that Gerschgorin's theorem also applies to off-diagonal column
 sums of $A$ (by considering $A^H$, for example). Indeed, the union of the
 Gerschgorin sets of $A$ and those of $A^H$ may provide tighter bounds than
 illustrated here.  One can further consider how tight one can make
 Gerschgorin-based estimates of eigenvalues, and Professor Varga has had a lot
 to say about this<a href="#v3">[8]</a>.
+
 </p><p>
 
 Each Gerschgorin disk uses data from one row of the matrix $A$. What if we
