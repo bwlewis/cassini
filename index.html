@@ -149,7 +149,7 @@ Press the 'Plot' button to produce a plot for the displayed 3x3 matrix.  You
 can edit the values in the matrix by hand, or generate new random values by
 pressing the button. Press on the plot labels to show or hide corresponding
 plot elements.
-</p>
+
 
 <br/>
 <div style="padding-left: 20px; float: right; padding-right: 40px;">
@@ -204,13 +204,13 @@ I've updated that old work for the modern era here. Consider
 this a small dedication to Professor Varga as thanks for his
 wonderful enthusiasm for&mdash;and significant contributions
 to&mdash;mathematics.
-</p><p>
+<p>
 
 The plot above illustrates two eigenvalue inclusion methods. The methods
 produce sets in the complex plane that are guaranteed to contain the
 eigenvalues of a matrix. The methods are cheaper to compute than precise
 eigenvalue estimates for large matrices, but the inclusion sets might be big.
-</p><p>
+<p>
 
 Gerschgorin's theorem<a href="#ge">[4]</a> defines perhaps the most
 famous eigenvalue inclusion method. Let
@@ -225,10 +225,12 @@ and the Gerschgorin theorem states that the above set contains the eigenvalues
 of $A$. (The theorem is elegant but elementary, try to prove it before looking
 it up!)
 
+<p>
 Gerschgorin's theorem says that if we replace a matrix with only two numbers
 per row, the diagonal entry and off-diagonal row sum, then we can still bound
 where its eigenvalues will be!
 
+<p>
 It's easy to see that Gerschgorin's theorem also applies to off-diagonal column
 sums of $A$ (by considering $A^H$, for example). Indeed, the union of the
 Gerschgorin sets of $A$ and those of $A^H$ may provide tighter bounds than
@@ -236,7 +238,7 @@ illustrated here.  One can further consider how tight one can make
 Gerschgorin-based estimates of eigenvalues, and Professor Varga has had a lot
 to say about this<a href="#v3">[8]</a>.
 
-</p><p>
+<p>
 
 Each Gerschgorin disk uses data from one row of the matrix $A$. What if we
 consider <i>two</i> rows at a time? Can we find sets that contain $A$'s
@@ -244,7 +246,7 @@ eigenvalues similarly to the Gerschgorin theorem? This question was
 answered (affirmatively) by Alfred Brauer in 1947 when he came up with sets
 that he called the ovals of Cassini<a href="#br1">[1]</a>.
 
-</p><p>
+<p>
 
 Let the $ij$-<i>th</i> oval of Cassini of the matrix $A$ be defined by:
 \[
@@ -258,7 +260,7 @@ the total number of $n$ Gerschgorin disks&mdash;except, notably, in the
 interactive example above. Brauer showed that the
 eigenvalues of the matrix $A$ are included in the union of all its ovals
 of Cassini.
-</p><p>
+<p>
 
 Are the ovals of Cassini better at bounding eigenvalues than Gerschgorin diks?
 The answer is yes!  The ovals of Cassini are <i>always</i> at least as good as
@@ -271,7 +273,7 @@ ovals of Cassini always lie within the Gerschgorin disks.) This result is not
 so well-known.  Varga(<a href="#v2">[7]</a> and <a href="#v1">[6]</a>) and
 Varga and Krautstengl<a href="#vk">[9]</a> show even more&mdash;that under very
 general conditions the ovals of Cassini define optimal (tightest) eigenvalue
-inclusion sets among methods that use the same amount information.  </p><p>
+inclusion sets among methods that use the same amount information.  <p>
 
 What about considering three or more rows of a Matrix at a time? Can the
 inclusion bounds be improved even more?  Remarkably, in general the answer is
@@ -280,7 +282,7 @@ the eigenvalues. This is shown with a counter-example in Horn and Johnson's
 book<a href="#hj">[5, p. 382]</a>.  However, see Brualdi's really interesting
 paper <a href="#bru">[3]</a> for an extension of Gerschgorin and Brauer's ideas
 to more rows that <i>does</i> work for special matrices related to directed
-graphs.  </p> </div> <!-- discussion container --> </div> <!-- page 2 -->
+graphs.   </div> <!-- discussion container --> </div> <!-- page 2 -->
 
 <div id="page3" class="divpage3">
 <a id="javascript"></a>
@@ -294,7 +296,7 @@ LaTeX expressions are rendered using the
 All source code files are available on Github at
 <a href="https://github.com/bwlewis/cassini">https://github.com/bwlewis/cassini</a>. You can view a live version of this document there at:
 <a href="http://bwlewis.github.io/cassini/">http://bwlewis.github.io/cassini/</a>.
-</p>
+
 <h2>Complex numbers</h2>
 <p>
 I considered many available numeric libraries for Javascript, including
@@ -302,7 +304,7 @@ the very admirable <a href="http://www.numericjs.com/">NumericJavascript</a>
 project. After many experiments, I was never fully satisfied, mostly because
 few (none that I could find) projects support eigenvalue solvers for
 complex-valued matrices.
-</p>
+
 <p>
 In the end, I broke my usual rule of not re-inventing the wheel and
 implemented a really simple and tiny 
@@ -312,12 +314,12 @@ library for Javascript myself available here:
 Feel free to fork it, use it, whatever. It's pretty basic but it does
 support complex-valued matrix multiplication, complex-valued matrix
 QR decomposition, and a few other things.
-</p>
+
 <h2>Plotting Brauer's ovals of Cassini</h2>
 <p>
 This section outlines the approach the interactive example takes
 to numerically estimate and display the ovals of Cassini.
-</p>
+
 <p>
 Let's consider just one oval using rows 1 and 2 of the matrix $A$. We
 parameterize the corresponding oval of Cassini by the following
@@ -375,7 +377,7 @@ the corresponding shifted and rotated oval of Cassini.
 <li> Apply the inverse shifts and rotations from steps 3&mdash;1 to the
 solution points to obtain points on the boundary of the original oval.
 </ol>
-</p>
+
 <h2>Notes and some additional difficulties</h2>
 <p>
 Eigenvalue solvers applied to an appropriate companion matrix are the normal
@@ -384,7 +386,7 @@ degree polynomial was simple enough (monic, real-valued coefficients) to
 admit a fast direct algebraic solution. If you want to extend this to
 larger matrices, you'll need to use an iterative eigenvalue solver instead
 (thank you very much Galois!).
-</p>
+
 <p>
 Finding points on the boundary of the ovals of the Cassini is one problem,
 and properly displaying them an entirely different one. Depending on how
@@ -399,7 +401,7 @@ contiguous boundary point values in d3.js or else the figure will zig/zag
 between boundary values and not get filled in properly. The code goes
 to some effort to get this right, but I think that there are still some
 edge cases where it's not quite working perfectly yet!
-</p>
+
 </div> <!-- page container -->
 </div> <!-- page 3 -->
 <div id="page4" class="divpage4">
@@ -408,7 +410,7 @@ edge cases where it's not quite working perfectly yet!
 <center><h1 style="color: #eee;">Author</h1></center>
 <p style="color: #eee;">
 I'm Bryan W. Lewis. I have a web page here: <a href="http://illposed.net" style="color: #eee;">http://illposed.net</a>.
-</p>
+
 <p style="color: #eee;">
 <center><h1 style="color: #eee;">References</h1></center>
 <ol style="color: #fff;">
@@ -436,7 +438,7 @@ The MathJax Consortium and licensed under the Apache License, version 2.
 The Gerschgorin and Brauer's ovals of Cassini program and associated
 complex.js library were written by me and are licensed under the three-clause
 BSD license.
-</p>
+
 <br/><br/><br/>
 </div>
 </div> <!-- page 4 -->
